@@ -63,6 +63,39 @@ It contains functionality for:
 * What task statuses and priority levels are available?
 * What happens when a task's status changes?
 
+## AI-Assisted Understanding.
+### Exercise Part 1 — Initial Understanding
+
+The feature being investigated is task creation and status updates.
+
+The main components involved are:
+
+- `TaskManager` — coordinates task creation and status updates.
+- `Task` — represents the task and contains its state and business methods.
+- `TaskStatus` — defines the available task statuses.
+- `TaskStorage` — stores and retrieves tasks using a JSON file.
+
+### Initial Execution Flow
+
+When a task is created, `TaskManager.createTask()` processes the priority and due date, creates a new `Task`, and sends it to `TaskStorage.addTask()`.
+
+The `Task` constructor automatically generates an ID, sets the initial status to `TODO`, and records the creation time.
+
+`TaskStorage` stores tasks in a `HashMap` and saves them to a JSON file using Gson.
+
+When a task status is updated, `TaskManager.updateTaskStatus()` converts the supplied status value into a `TaskStatus`, retrieves the task from storage, and changes its status.
+
+If the new status is `DONE`, `Task.markAsDone()` is called. This records the completion time and updates the task's `updatedAt` value.
+
+Finally, the storage is saved so that the changes persist in the JSON file.
+
+### Initial Questions
+
+- How exactly does the command-line interface call `TaskManager.createTask()` and `updateTaskStatus()`?
+- Why does the application use both `setStatus()` and `markAsDone()` when completing a task?
+- How does Gson convert the `Task` objects to and from JSON?
+- What happens if the storage file cannot be read or written?
+
 ## AI-Assisted Understanding
 
 This section will be updated throughout the exercise with findings, corrections, and insights from the AI prompts.
