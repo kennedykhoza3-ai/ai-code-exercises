@@ -171,3 +171,57 @@ After examining the code, I discovered that:
 1. Add functionality that changes the default status assigned to a newly created task.
 2. Add support for recognising and storing an additional valid task status.
 3. Add a requirement for recording an additional timestamp when a task's status changes.
+
+
+## Exercise Part 2 — Deepen Understanding Through Guided Questions
+
+### Feature Investigated
+Task prioritization.
+
+### Initial Understanding
+
+The task manager uses four priority levels:
+
+- LOW = 1
+- MEDIUM = 2
+- HIGH = 3
+- URGENT = 4
+
+I initially understood that entering priority value 3 would create a task with HIGH priority. I also understood that an enum provides a fixed set of valid priority options and helps prevent invalid values.
+
+I expected an invalid value such as 5 to be rejected.
+
+### Discoveries Through Guided Questions
+
+The numeric priority supplied by the user is converted into a `TaskPriority` enum using `TaskPriority.fromValue()`.
+
+For example:
+
+3 → TaskPriority.HIGH
+
+The `Task` object stores the priority as a `TaskPriority` field rather than simply storing the number.
+
+The `TaskStorage.getTasksByPriority()` method compares the task's `TaskPriority` value when filtering tasks by priority.
+
+If an invalid priority such as 5 is supplied, `TaskPriority.fromValue()` throws an `IllegalArgumentException`. This happens before the new `Task` object is created.
+
+Changing the priority of an existing task is different from creating a new task. The existing task is updated rather than creating a new task.
+
+### Key Insights From Guided Questions
+
+- `TaskPriority` acts as the central definition of valid priority levels.
+- The numeric value is used as an input to find the corresponding enum value.
+- The `Task` stores the resulting `TaskPriority`.
+- Invalid priority values are rejected through an exception.
+- Priority can be assigned during task creation or changed later on an existing task.
+- The storage layer can filter tasks using their `TaskPriority`.
+
+### Misconceptions Clarified
+
+I initially thought of the priority mainly as a numeric value. The code showed that the number is actually converted into a `TaskPriority` enum and the task stores that enum value.
+
+I also clarified the difference between assigning a priority during task creation and updating the priority of an existing task.
+
+### Practical Application
+
+A possible extension would be to add a new priority level such as `CRITICAL = 5`. The priority definition would need to be updated so that the application recognises the new valid priority.
