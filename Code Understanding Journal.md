@@ -265,3 +265,94 @@ updatedAt = current time
 Gson converts tasks to JSON
          ↓
        JSON file
+
+
+## Exercise Part 4 — Practical Application and Reflection
+
+### Practical Scenario
+
+The team needs to implement the following business rule:
+
+> Tasks that are overdue for more than 7 days should be automatically marked as abandoned unless they are marked as high priority.
+
+### Files to Investigate
+
+Based on my understanding of the codebase, I would investigate the following files:
+
+1. `Task.java`
+   - Contains the task's state and business methods.
+   - I would investigate how overdue tasks are identified and where the logic for changing task state should be placed.
+
+2. `TaskStatus.java`
+   - Defines the valid task statuses.
+   - I would investigate adding an `ABANDONED` status if this is confirmed as the required business status.
+
+3. `TaskPriority.java`
+   - Defines the available priority levels.
+   - I would use this to determine whether a task has HIGH priority and should be excluded from the automatic abandonment rule.
+
+4. `TaskStorage.java`
+   - Handles storing and retrieving tasks.
+   - It already contains functionality for finding overdue tasks, so I would investigate whether it can support identifying tasks overdue by more than seven days.
+
+5. `TaskManager.java`
+   - Coordinates task operations.
+   - I would investigate whether this is the appropriate place to coordinate the new automatic business rule.
+
+### Planned Implementation
+
+Before making changes, I would first understand how the application currently determines whether a task is overdue and how dates and priorities are represented.
+
+I would then plan to:
+
+1. Add an `ABANDONED` status if the team confirms that this is the correct status.
+2. Identify tasks whose due dates are more than seven days in the past.
+3. Exclude tasks that have HIGH priority.
+4. Determine how tasks should be automatically changed to `ABANDONED`.
+5. Persist the changed task state using the existing storage mechanism.
+6. Check existing tests and add appropriate tests for the new business rule.
+
+### Questions for the Team
+
+Before implementing the rule, I would ask:
+
+1. Should URGENT priority tasks also be protected, or only HIGH priority tasks?
+2. What does "automatically" mean in this application? Should the rule run when the application starts, when tasks are listed, or through a scheduled process?
+3. Should tasks without a due date ever become abandoned?
+4. Can a task that is already DONE become ABANDONED?
+5. Does "more than 7 days" mean exactly 7 × 24 hours or seven calendar days?
+6. Should tasks in REVIEW or IN_PROGRESS be treated differently from TODO tasks?
+
+### Reflection — How AI Prompts Helped
+
+The AI prompts helped me understand the code systematically instead of trying to understand the entire application at once.
+
+Prompt 1 helped me trace task creation and status updates and understand how `TaskManager`, `Task`, `TaskStatus`, and `TaskStorage` interact.
+
+Prompt 2 helped me investigate the task prioritization system through guided questions. This helped me form my own understanding and then check it against the code.
+
+Prompt 3 helped me map the data flow when a task is marked as complete. I was able to follow the task from the status update request through `TaskManager`, into the `Task` object, and finally to `TaskStorage` and the JSON file.
+
+### What I Am Still Unsure About
+
+I still need a deeper understanding of how the CLI connects user commands to `TaskManager`.
+
+I also need to understand when automatic operations are triggered, how the storage path is configured, and how the application lifecycle affects loading and saving tasks.
+
+### Next Steps to Deepen My Understanding
+
+My next steps would be:
+
+1. Examine `TaskManagerCli.java` to understand the application's entry point and how user commands reach the application logic.
+2. Examine the tests to understand the expected behaviour of the application.
+3. Investigate how the storage file and storage path are configured.
+4. Trace a complete user interaction from the CLI through `TaskManager` and `TaskStorage`.
+5. Use AI prompts to validate my understanding of any remaining unfamiliar components.
+
+### Overall Reflection
+
+The exercise showed me that understanding an unfamiliar codebase is easier when I break the investigation into smaller features.
+
+I learned to identify the responsibilities of different classes, follow data between components, examine how state changes, and use AI to validate my understanding rather than relying only on direct explanations.
+
+I also learned that before implementing a new business rule, I should understand the existing architecture and clarify ambiguous requirements with the development team.
