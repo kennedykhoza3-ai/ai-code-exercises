@@ -225,3 +225,43 @@ I also clarified the difference between assigning a priority during task creatio
 ### Practical Application
 
 A possible extension would be to add a new priority level such as `CRITICAL = 5`. The priority definition would need to be updated so that the application recognises the new valid priority.
+
+## Exercise Part 3 — Mapping Data Flow
+
+### Feature Investigated
+Task completion — marking an existing task as `DONE`.
+
+### Entry Point
+
+The process begins when a user requests that an existing task's status be changed. The relevant method is:
+
+`TaskManager.updateTaskStatus()`
+
+### Data Flow
+
+```text
+User requests task to be marked as DONE
+                ↓
+        TaskManager
+                ↓
+Convert "done" into TaskStatus.DONE
+                ↓
+       Find task by its ID
+                ↓
+        Does the task exist?
+          /             \
+        YES              NO
+         ↓                ↓
+Update task status     Return false
+         ↓
+If status is DONE:
+         ↓
+status = DONE
+completedAt = current time
+updatedAt = current time
+         ↓
+      TaskStorage.save()
+         ↓
+Gson converts tasks to JSON
+         ↓
+       JSON file
