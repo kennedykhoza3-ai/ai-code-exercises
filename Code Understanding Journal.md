@@ -12,7 +12,7 @@ The application appears to be a command-line Task Manager for creating, organizi
 
 The main Java source code is under `src/main/java`.
 
-The project also has a separate `src/test/java` directory for tests.
+The project also has a separate `src/test/java` directory for tests.            
 
 The main packages identified are:
 
@@ -99,3 +99,75 @@ Finally, the storage is saved so that the changes persist in the JSON file.
 ## AI-Assisted Understanding
 
 This section will be updated throughout the exercise with findings, corrections, and insights from the AI prompts.
+
+
+## Exercise Part 1 — Understanding a Specific Feature
+
+### Feature Investigated
+Task creation and status updates.
+
+### Main Components Involved
+
+- `TaskManager.java` — coordinates task creation and status updates.
+- `Task.java` — represents an individual task and manages its state.
+- `TaskStatus.java` — defines the valid task statuses.
+- `TaskStorage.java` — stores, retrieves, and persists tasks.
+
+### Task Creation Flow
+
+1. `TaskManager.createTask()` receives the task information.
+2. The priority value is converted into a `TaskPriority`.
+3. The due date is parsed if one is provided.
+4. A new `Task` object is created.
+5. The `Task` constructor generates a unique ID and sets the initial status to `TODO`.
+6. `TaskStorage.addTask()` puts the task into the in-memory `HashMap`.
+7. `TaskStorage.save()` persists the tasks to a JSON file using Gson.
+8. The task ID is returned.
+
+### Status Update Flow
+
+1. `TaskManager.updateTaskStatus()` receives a task ID and new status.
+2. `TaskStatus.fromValue()` converts the text value into a valid `TaskStatus`.
+3. `TaskStorage.getTask()` retrieves the task.
+4. The task status is changed.
+5. If the new status is `DONE`, `Task.markAsDone()` records the completion time and updates the timestamp.
+6. `TaskStorage.save()` persists the changes to the JSON file.
+7. The method returns `true` when the update succeeds.
+
+### Data Storage and Retrieval
+
+Tasks are kept in memory using a `HashMap`, with the task ID used as the key.
+
+Gson is used to convert the tasks into JSON when they are saved. This allows the task information to persist between application runs.
+
+### Interesting Design Approach
+
+The `Task` class contains business methods such as `markAsDone()` rather than requiring other parts of the application to manually update all completion-related fields.
+
+`TaskManager` acts as a coordinator between the task objects and the storage layer.
+
+### Initial Understanding vs Discovery
+
+Initially, I understood that `TaskManager` was responsible for creating and updating tasks, but I was not completely sure how the other classes worked together.
+
+After examining the code, I discovered that:
+
+- `TaskManager` coordinates the operations.
+- `Task` owns the task's state and business behaviour.
+- `TaskStatus` controls the valid status values.
+- `TaskStorage` manages persistence.
+- Gson is responsible for converting Java task objects to JSON.
+- Completing a task involves more than changing its status because `completedAt` and `updatedAt` are also updated.
+
+### Questions Clarified
+
+- How the four main classes interact during task creation and status updates.
+- How task changes are persisted to the JSON file.
+- Why `markAsDone()` is used when a task becomes `DONE`.
+- How status text is converted into the appropriate Java enum.
+
+### Validation Requirements
+
+1. Add functionality that changes the default status assigned to a newly created task.
+2. Add support for recognising and storing an additional valid task status.
+3. Add a requirement for recording an additional timestamp when a task's status changes.
