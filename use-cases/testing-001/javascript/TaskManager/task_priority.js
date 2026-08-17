@@ -1,6 +1,6 @@
-const {TaskPriority, TaskStatus} = require("./models");
+const { TaskPriority, TaskStatus } = require("./models");
 
-function calculateTaskScore(task) {
+function calculateTaskScore(task, currentUser) {
   // Base priority weights
   const priorityWeights = {
     [TaskPriority.LOW]: 1,
@@ -15,16 +15,22 @@ function calculateTaskScore(task) {
   // Add due date factor (higher score for tasks due sooner)
   if (task.dueDate) {
     const now = new Date();
-    const dueDate =task.dueDate;
-    const daysUntilDue = Math.ceil((dueDate - now) / (1000 * 60 * 60 * 24));
+    const dueDate = task.dueDate;
+    const daysUntilDue = Math.ceil(
+      (dueDate - now) / (1000 * 60 * 60 * 24)
+    );
 
-    if (daysUntilDue < 0) {  // Overdue tasks
+    if (daysUntilDue < 0) {
+      // Overdue tasks
       score += 30;
-    } else if (daysUntilDue === 0) {  // Due today
+    } else if (daysUntilDue === 0) {
+      // Due today
       score += 20;
-    } else if (daysUntilDue <= 2) {  // Due in next 2 days
+    } else if (daysUntilDue <= 2) {
+      // Due in next 2 days
       score += 15;
-    } else if (daysUntilDue <= 7) {  // Due in next week
+    } else if (daysUntilDue <= 7) {
+      // Due in next week
       score += 10;
     }
   }
@@ -37,17 +43,29 @@ function calculateTaskScore(task) {
   }
 
   // Boost score for tasks with certain tags
-  if (task.tags.some(tag => ["blocker", "critical", "urgent"].includes(tag))) {
+  if (
+    task.tags.some(tag =>
+      ["blocker", "critical", "urgent"].includes(tag)
+    )
+  ) {
     score += 8;
   }
 
   // Boost score for recently updated tasks
   const now = new Date();
   const updatedAt = new Date(task.updatedAt);
-  const daysSinceUpdate = Math.floor((now - updatedAt) / (1000 * 60 * 60 * 24));
+  const daysSinceUpdate = Math.floor(
+    (now - updatedAt) / (1000 * 60 * 60 * 24)
+  );
+
   if (daysSinceUpdate < 1) {
     score += 5;
   }
+
+  // Boost tasks assigned to the current user
+  if (currentUser && task.assignedTo === currentUser) {
+  score += 12;
+}
 
   return score;
 }
@@ -65,4 +83,8 @@ function getTopPriorityTasks(tasks, limit = 5) {
 }
 
 // Export functions for testing
-module.exports = { calculateTaskScore, sortTasksByImportance, getTopPriorityTasks };
+module.exports = {
+  calculateTaskScore,
+  sortTasksByImportance,
+  getTopPriorityTasks
+};
