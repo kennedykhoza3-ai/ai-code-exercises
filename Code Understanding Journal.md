@@ -1050,3 +1050,42 @@ I would keep the documentation updated whenever the API behaviour changes.
 This exercise showed me that AI can significantly reduce the effort required to create API documentation, but the developer still needs to review the generated documentation for accuracy.
 
 I learned that good API documentation should be clear, structured, practical, and based on the actual behaviour of the application.
+
+## Final Submission Reflection
+
+### Which Parts Were Most Challenging to Document?
+
+The most challenging parts were the query parameters, pagination, sorting behaviour, and identifying possible error scenarios. I had to carefully examine the implementation to understand the default values and how the parameters affect the database query.
+
+Authentication and rate limiting were also important because they were not shown in the endpoint code. Instead of making assumptions, I documented that these requirements could not be determined from the provided implementation.
+
+### How Did I Adjust My Prompts?
+
+I improved the prompt by explicitly asking for:
+
+* All query parameters and their types
+* Default values
+* HTTP status codes
+* Realistic request and response examples
+* Authentication requirements
+* Rate limiting
+* Error scenarios
+* Assumptions and limitations that cannot be determined from the code
+
+This helped produce more complete and accurate documentation.
+
+### Which Documentation Format Did I Find Most Effective?
+
+I found Markdown documentation easiest to read and understand as a developer.
+
+However, OpenAPI YAML is useful because it provides a structured format that can be used by API documentation tools and can help standardize API definitions.
+
+I therefore think both formats are useful for different purposes.
+
+### How Would I Use This Approach in My Development Workflow?
+
+I would use AI to create an initial documentation draft whenever I create or modify an API endpoint.
+
+I would then compare the generated documentation with the actual implementation and tests, correct any inaccurate information, and update the documentation before considering the API change complete.
+
+This approach could save development time while helping keep documentation consistent and up to date.
