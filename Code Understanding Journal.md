@@ -837,3 +837,176 @@ Converting the API documentation into OpenAPI YAML helped me understand how an A
 I learned that the endpoint's HTTP method, path, query parameters, response status codes, response structure, and examples can all be described in a structured document.
 
 I also learned that documentation should only include information supported by the implementation. Authentication and rate-limiting details were not included because they could not be determined from the provided code.
+
+## Prompt 3: API Usage Guide Creation
+
+### Developer Guide: Using the Product API
+
+#### 1. Overview
+
+The Product API provides an endpoint for retrieving products from the application.
+
+The `GET /products` endpoint allows developers to retrieve products and optionally filter, sort, and paginate the results.
+
+**Endpoint:**
+
+`GET /products`
+
+#### 2. Authentication
+
+Authentication requirements cannot be determined from the provided implementation.
+
+The endpoint code does not show authentication or authorization middleware, so developers should check the wider application configuration before assuming that the endpoint is publicly accessible.
+
+#### 3. Basic Usage
+
+To retrieve products using the default settings:
+
+```text
+GET /products
+```
+
+The default behaviour is:
+
+* Sort by `createdAt`
+* Sort in descending order
+* Return page 1
+* Return up to 20 products
+
+#### 4. Filtering Products
+
+Products can be filtered using query parameters.
+
+##### Filter by Category
+
+```text
+GET /products?category=Electronics
+```
+
+##### Filter by Price
+
+```text
+GET /products?minPrice=100&maxPrice=1000
+```
+
+This returns products with prices between 100 and 1000.
+
+##### Filter by Stock
+
+```text
+GET /products?inStock=true
+```
+
+This returns products where the stock quantity is greater than zero.
+
+Filters can also be combined:
+
+```text
+GET /products?category=Electronics&minPrice=100&maxPrice=1000&inStock=true
+```
+
+#### 5. Sorting Products
+
+The `sort` parameter specifies the field used for sorting.
+
+The `order` parameter specifies the direction.
+
+Example:
+
+```text
+GET /products?sort=price&order=asc
+```
+
+This requests products sorted by price from lowest to highest.
+
+For descending order:
+
+```text
+GET /products?sort=price&order=desc
+```
+
+#### 6. Pagination
+
+The API supports pagination using the `page` and `limit` parameters.
+
+Example:
+
+```text
+GET /products?page=2&limit=10
+```
+
+This requests the second page with up to 10 products.
+
+The response includes pagination information:
+
+```json
+{
+  "pagination": {
+    "total": 45,
+    "page": 2,
+    "limit": 10,
+    "pages": 5
+  }
+}
+```
+
+#### 7. Complete Example
+
+A developer can combine filtering, sorting, and pagination in one request:
+
+```text
+GET /products?category=Electronics&minPrice=100&maxPrice=1000&sort=price&order=asc&inStock=true&page=1&limit=10
+```
+
+The API returns a response containing the matching products and pagination information.
+
+#### 8. Handling Errors
+
+If the server encounters an unexpected problem while retrieving products, it returns HTTP `500`.
+
+Example:
+
+```json
+{
+  "error": "Server error",
+  "message": "Failed to fetch products"
+}
+```
+
+Developers should handle this response appropriately and avoid assuming that the request was successful.
+
+#### 9. Important Considerations
+
+Developers using this endpoint should consider the following:
+
+* `page` and `limit` are converted to integers by the server.
+* `minPrice` and `maxPrice` are converted to floating-point numbers.
+* The stock filter is activated when `inStock=true`.
+* The default page is `1`.
+* The default limit is `20`.
+* The default sort field is `createdAt`.
+* The default sort order is descending.
+* Authentication requirements are not visible in the provided code.
+* Rate limiting is not visible in the provided code.
+* The complete product schema is not available from this endpoint alone.
+
+#### 10. Best Practices
+
+When integrating with the Product API:
+
+1. Use pagination rather than requesting unnecessarily large result sets.
+2. Apply filters when possible to reduce the amount of data returned.
+3. Handle HTTP errors appropriately.
+4. Do not assume authentication or rate-limiting behaviour without checking the wider application.
+5. Validate user-provided query parameters before constructing requests.
+6. Use sorting and filtering together when the application requires a specific result set.
+
+#### What I Learned
+
+Creating the usage guide helped me understand the difference between technical API documentation and a developer guide.
+
+The endpoint documentation describes what the API does and how it is structured, while the usage guide focuses more on how another developer would actually use the endpoint.
+
+I also learned that examples are important because they show developers how query parameters can be combined to perform realistic operations.
+
+The exercise reinforced the importance of checking the actual implementation before documenting assumptions about authentication, rate limiting, validation, or other behaviour.
