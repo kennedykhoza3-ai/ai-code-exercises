@@ -358,3 +358,156 @@ I learned to identify the responsibilities of different classes, follow data bet
 I also learned that before implementing a new business rule, I should understand the existing architecture and clarify ambiguous requirements with the development team.
 
 ## Exercise: Code Documentation
+
+## 1. Original Code Selected
+
+I selected the `calculateTaskScore(Task task)` method from the Task Priority Sorting Algorithm.
+
+The method calculates an importance score for a task using several factors:
+
+* Task priority
+* Due date
+* Task status
+* Important tags
+* How recently the task was updated
+
+The resulting score can be used to compare and sort tasks by importance.
+
+## 2. Documentation Generated Using Prompt 1
+
+```java
+/**
+ * Calculates an importance score for a task based on its priority, due date,
+ * current status, tags, and how recently it was updated.
+ *
+ * <p>Higher priority tasks receive higher base scores. Additional points
+ * are added for overdue or approaching due dates and for tasks containing
+ * important tags. Completed and review tasks receive score reductions.
+ * Recently updated tasks receive a small score increase.</p>
+ *
+ * @param task the task for which the importance score is calculated
+ * @return the calculated integer importance score
+ *
+ * @throws NullPointerException if the task is null or if required task
+ *         properties are null when accessed
+ *
+ * @apiNote The scoring system uses fixed weights for priority, due dates,
+ *          status, tags, and recent updates. The method does not modify
+ *          the task itself.
+ *
+ * @implNote An overdue task receives 30 additional points. A task due today
+ *           receives 20 points, a task due within two days receives 15 points,
+ *           and a task due within seven days receives 10 points.
+ */
+public static int calculateTaskScore(Task task)
+```
+
+## 3. Insights From Prompt 2
+
+The method is designed to convert several task properties into a single numerical score so that tasks can be compared and prioritized.
+
+### Logic identified
+
+1. The task's priority is converted into a base score:
+
+   * LOW = 10
+   * MEDIUM = 20
+   * HIGH = 30
+   * URGENT = 40
+
+2. The due date can increase the score:
+
+   * Overdue = +30
+   * Due today = +20
+   * Due within 2 days = +15
+   * Due within 7 days = +10
+
+3. The task status can reduce the score:
+
+   * DONE = -50
+   * REVIEW = -15
+
+4. Important tags such as `blocker`, `critical`, or `urgent` add +8.
+
+5. A task updated within the last day receives an additional +5.
+
+6. The final score is returned as an integer.
+
+### Assumptions and Edge Cases
+
+* The method assumes that the supplied `Task` object is not null.
+* A task without a due date does not receive any due-date points.
+* The scoring system assumes the priority values defined by `TaskPriority`.
+* The method depends on the current system time, so the score can change as time passes.
+* The calculation uses fixed scoring weights that are part of the business logic.
+* A completed task can receive other positive points before the -50 status adjustment is applied.
+
+## 4. Suggested Inline Comments
+
+Useful comments could explain the major scoring sections rather than every individual line.
+
+Examples:
+
+```java
+// Calculate the base score from the task's priority.
+```
+
+```java
+// Increase the score when the task is overdue or approaching its due date.
+```
+
+```java
+// Reduce the score for tasks that are already completed or under review.
+```
+
+```java
+// Give additional importance to tasks with critical or blocking tags.
+```
+
+```java
+// Give a small boost to tasks that were recently updated.
+```
+
+## 5. Potential Improvements
+
+The existing functionality can be maintained while improving the implementation by:
+
+* Moving the scoring weights into named constants so they are easier to understand and maintain.
+* Avoiding repeated creation of the important-tag list.
+* Adding validation for a null `Task`.
+* Adding unit tests for each scoring condition.
+* Documenting the overall scoring formula so developers understand why each weight exists.
+* Considering whether time-based calculations should use a consistent clock when testing.
+
+## 6. Final Combined Documentation
+
+### Purpose
+
+`calculateTaskScore()` calculates a numerical importance score for a task. The score combines task priority, due-date urgency, completion status, important tags, and recent activity.
+
+### Data Flow
+
+The method receives a `Task` object, reads its properties, applies the appropriate scoring rules, and returns one integer representing the task's calculated importance.
+
+### Scoring Model
+
+| Factor        | Condition               | Score Change |
+| ------------- | ----------------------- | -----------: |
+| Priority      | LOW                     |          +10 |
+| Priority      | MEDIUM                  |          +20 |
+| Priority      | HIGH                    |          +30 |
+| Priority      | URGENT                  |          +40 |
+| Due date      | Overdue                 |          +30 |
+| Due date      | Today                   |          +20 |
+| Due date      | Within 2 days           |          +15 |
+| Due date      | Within 7 days           |          +10 |
+| Status        | DONE                    |          -50 |
+| Status        | REVIEW                  |          -15 |
+| Tags          | blocker/critical/urgent |           +8 |
+| Recent update | Less than 1 day         |           +5 |
+
+### Final Understanding
+
+The method does not change the task. It only reads the task's current information and calculates a score. That score can then be used by `sortTasksByImportance()` to place the most important tasks first.
+
+This exercise showed me that AI can help generate documentation, but the generated documentation still needs to be checked against the actual code. I also learned that good documentation should explain not only what the code does, but also its assumptions, edge cases, and business logic.
