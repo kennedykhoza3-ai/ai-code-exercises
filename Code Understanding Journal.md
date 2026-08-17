@@ -1504,3 +1504,115 @@ Creating this guide helped me understand that user documentation should explain 
 I also learned that documentation should clearly distinguish between information confirmed by the implementation and information that needs to be checked in the actual CLI.
 
 A step-by-step guide can make a complex application easier for a new user or developer to understand.
+
+
+## Prompt 3: FAQ Document Generation
+
+### Task Manager — Frequently Asked Questions
+
+#### 1. What is the Task Manager?
+
+The Task Manager is a Java command-line application used to create, manage, organize, and track tasks.
+
+#### 2. What programming language is the project written in?
+
+The project is written in **Java** and uses **Gradle** as its build system.
+
+#### 3. What information does a task contain?
+
+A task can contain information such as:
+
+* ID
+* Title
+* Description
+* Priority
+* Status
+* Creation date
+* Updated date
+* Due date
+* Completion date
+* Tags
+
+#### 4. What priority levels are available?
+
+The application supports four priority levels:
+
+* LOW
+* MEDIUM
+* HIGH
+* URGENT
+
+#### 5. What task statuses are available?
+
+The application supports:
+
+* TODO
+* IN_PROGRESS
+* REVIEW
+* DONE
+
+#### 6. What happens when a task is marked as DONE?
+
+When a task is marked as `DONE`, the application records the completion time and updates the task's modification timestamp.
+
+#### 7. How are tasks stored?
+
+Tasks are handled by the `TaskStorage` class. Gson is used to convert Java task objects into JSON data for storage.
+
+#### 8. What happens if I provide an invalid task ID?
+
+The application attempts to find the task using its ID. If the task cannot be found, the operation does not update that task.
+
+#### 9. Can tasks have tags?
+
+Yes. Tasks can have multiple tags. Tags can be used to categorize or identify tasks.
+
+#### 10. Can tasks have due dates?
+
+Yes. A task can have a due date. The application can use due-date information when identifying overdue tasks and calculating task importance.
+
+#### 11. How does the application determine task importance?
+
+The task priority sorting algorithm calculates a score using several factors, including:
+
+* Task priority
+* Due date
+* Task status
+* Important tags
+* Recent updates
+
+Tasks with higher calculated scores are considered more important.
+
+#### 12. Does the application automatically save changes?
+
+Task changes are persisted through `TaskStorage`, which saves the task information to JSON storage.
+
+#### 13. How can I troubleshoot a problem?
+
+A useful approach is to trace the operation through the application:
+
+```text
+CLI command
+    ↓
+TaskManagerCli
+    ↓
+TaskManager
+    ↓
+Task
+    ↓
+TaskStorage
+    ↓
+JSON storage
+```
+
+This helps identify which part of the application is responsible for the problem.
+
+#### 14. Where can I find the exact command syntax?
+
+The exact command syntax is defined by `TaskManagerCli.java` and the project's README. These should be checked rather than assuming command arguments.
+
+#### 15. What did I learn from creating this FAQ?
+
+Creating the FAQ showed me that documentation should answer common questions in simple language.
+
+I also learned that good documentation should not make assumptions about information that has not been confirmed by the codebase. When something is unclear, the implementation or project documentation should be checked first.
