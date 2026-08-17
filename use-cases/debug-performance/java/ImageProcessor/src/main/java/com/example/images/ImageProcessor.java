@@ -111,38 +111,30 @@ public class ImageProcessor {
             outputDir.mkdirs();
         }
 
-        // Store all images in memory first
-        List<BufferedImage> images = new ArrayList<>();
-        System.out.println("Loading all images into memory...");
+        // Process one image at a time to reduce memory usage
+System.out.println("Processing images one at a time...");
 
-        for (File imageFile : imageFiles) {
-            BufferedImage image = ImageIO.read(imageFile);
-            images.add(image);
-            System.out.println("Loaded: " + imageFile.getName());
-        }
+for (File imageFile : imageFiles) {
+    BufferedImage image = ImageIO.read(imageFile);
 
-        // Print memory usage after loading
-        printMemoryStats.accept("AFTER LOADING", runtime);
+    if (image == null) {
+        System.out.println("Could not read: " + imageFile.getName());
+        continue;
+    }
 
-        // Process all images
-        System.out.println("Processing all images...");
-        List<BufferedImage> processedImages = new ArrayList<>();
+    BufferedImage processed = applyEffects(image);
 
-        for (BufferedImage image : images) {
-            BufferedImage processed = applyEffects(image);
-            processedImages.add(processed);
-        }
+    String outputName = outputFolder + File.separator
+            + "processed_" + imageFile.getName();
 
-        // Print memory usage after processing
-        printMemoryStats.accept("AFTER PROCESSING", runtime);
+    ImageIO.write(
+            processed,
+            getImageFormat(imageFile.getName()),
+            new File(outputName)
+    );
 
-        // Save all processed images
-        System.out.println("Saving all processed images...");
-        for (int i = 0; i < imageFiles.length; i++) {
-            String outputName = outputFolder + File.separator + "processed_" + imageFiles[i].getName();
-            ImageIO.write(processedImages.get(i), getImageFormat(imageFiles[i].getName()), new File(outputName));
-            System.out.println("Saved: " + outputName);
-        }
+    System.out.println("Processed and saved: " + outputName);
+}
 
         // Print final memory usage
         printMemoryStats.accept("END", runtime);
