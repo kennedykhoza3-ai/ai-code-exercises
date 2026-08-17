@@ -686,3 +686,154 @@ I learned that API documentation should describe not only what an endpoint does,
 The implementation code allowed me to identify the query parameters, default values, filtering behaviour, sorting, pagination, successful response, and server-error response.
 
 I also learned not to invent information that is not visible in the code. For example, authentication and rate-limiting requirements cannot be confirmed from this endpoint alone.
+
+## Prompt 2: API Reference Conversion
+
+### OpenAPI YAML
+
+I converted the `GET /products` endpoint documentation into an OpenAPI 3.0 YAML format.
+
+```yaml
+openapi: 3.0.0
+
+info:
+  title: Product API
+  description: API for retrieving products with filtering, sorting, and pagination.
+  version: 1.0.0
+
+paths:
+  /products:
+    get:
+      summary: Get products
+      description: Retrieves a list of products with optional filtering, sorting, and pagination.
+
+      parameters:
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filters products by category.
+
+        - name: minPrice
+          in: query
+          required: false
+          schema:
+            type: number
+            format: float
+          description: Returns products with a price greater than or equal to this value.
+
+        - name: maxPrice
+          in: query
+          required: false
+          schema:
+            type: number
+            format: float
+          description: Returns products with a price less than or equal to this value.
+
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            default: createdAt
+          description: Specifies the product field used for sorting.
+
+        - name: order
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+          description: Specifies the sorting direction.
+
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+          description: Specifies the page number to return.
+
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+          description: Specifies the maximum number of products returned per page.
+
+        - name: inStock
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: When true, only products with stock greater than zero are returned.
+
+      responses:
+        '200':
+          description: Products successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        category:
+                          type: string
+                        price:
+                          type: number
+                          format: float
+                        stockQuantity:
+                          type: integer
+
+                  pagination:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      page:
+                        type: integer
+                      limit:
+                        type: integer
+                      pages:
+                        type: integer
+
+        '500':
+          description: Server error while fetching products.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+
+              example:
+                error: "Server error"
+                message: "Failed to fetch products"
+
+# Authentication and rate limiting are not specified
+# in the provided endpoint implementation.
+```
+
+### What I Learned
+
+Converting the API documentation into OpenAPI YAML helped me understand how an API endpoint can be represented in a standard machine-readable format.
+
+I learned that the endpoint's HTTP method, path, query parameters, response status codes, response structure, and examples can all be described in a structured document.
+
+I also learned that documentation should only include information supported by the implementation. Authentication and rate-limiting details were not included because they could not be determined from the provided code.
