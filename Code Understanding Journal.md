@@ -1089,3 +1089,249 @@ I would use AI to create an initial documentation draft whenever I create or mod
 I would then compare the generated documentation with the actual implementation and tests, correct any inaccurate information, and update the documentation before considering the API change complete.
 
 This approach could save development time while helping keep documentation consistent and up to date.
+
+## Exercise: README and User Guide Documentation
+
+## Prompt 1: Project README Generation
+
+### Project README
+
+# Java Task Manager
+
+## Description
+
+The Java Task Manager is a command-line application for creating, managing, and organizing tasks.
+
+The application allows users to create tasks, view tasks, update task status and priority, manage due dates and tags, and store task information persistently.
+
+The project was used to understand an existing Java codebase and explore how AI can assist with software development and documentation.
+
+## Key Features
+
+* Create tasks
+* List tasks
+* Update task status
+* Set task priority
+* Set and manage due dates
+* Add and remove tags
+* Display individual tasks
+* Delete tasks
+* Start tasks
+* Identify tasks by status or priority
+* Store tasks in a JSON file
+* Sort and manage tasks based on their properties
+
+## Technologies Used
+
+* Java
+* Gradle
+* Gson for JSON serialization
+* Apache Commons CLI for command-line argument processing
+* JUnit for testing
+* Mockito for testing and mocking
+* AssertJ for test assertions
+
+## Requirements
+
+Before working with the project, you should have:
+
+* Java installed
+* Git installed
+* A terminal or command-line environment
+* Access to the project repository
+
+The project includes the Gradle Wrapper, so Gradle does not need to be installed separately when using the provided wrapper.
+
+## Project Structure
+
+The main application code is organized under:
+
+```text
+src/
+├── main/
+│   └── java/
+│       └── za/co/wethinkcode/taskmanager/
+│           ├── app/
+│           │   └── TaskManager.java
+│           ├── cli/
+│           │   └── TaskManagerCli.java
+│           ├── model/
+│           │   ├── Task.java
+│           │   ├── TaskPriority.java
+│           │   └── TaskStatus.java
+│           └── storage/
+│               └── TaskStorage.java
+└── test/
+```
+
+### Main Components
+
+**Task.java**
+
+Represents a task and contains information such as the task ID, title, description, priority, status, dates, and tags.
+
+**TaskPriority.java**
+
+Defines the valid task priority levels:
+
+* LOW
+* MEDIUM
+* HIGH
+* URGENT
+
+**TaskStatus.java**
+
+Defines the valid task statuses:
+
+* TODO
+* IN_PROGRESS
+* REVIEW
+* DONE
+
+**TaskManager.java**
+
+Coordinates task management operations and communicates with the storage layer.
+
+**TaskManagerCli.java**
+
+Provides the command-line interface through which users interact with the application.
+
+**TaskStorage.java**
+
+Handles loading and saving task data and provides operations for retrieving and updating tasks.
+
+## Building the Project
+
+From the project directory, run:
+
+```bash
+./gradlew build
+```
+
+On Windows, the Gradle Wrapper can be run with:
+
+```bash
+gradlew.bat build
+```
+
+## Running the Application
+
+The application can be run using the Gradle Wrapper.
+
+Example:
+
+```bash
+./gradlew run --args="<command>"
+```
+
+On Windows:
+
+```bash
+gradlew.bat run --args="<command>"
+```
+
+## Available Commands
+
+The Task Manager supports commands including:
+
+```text
+create
+list
+status
+priority
+due
+tag
+untag
+show
+delete
+start
+```
+
+The exact arguments required for each command should be checked in the project's README or CLI implementation.
+
+## Example Usage
+
+A typical workflow could involve:
+
+1. Creating a task.
+2. Listing existing tasks.
+3. Updating the task's priority.
+4. Setting a due date.
+5. Adding tags.
+6. Starting the task.
+7. Changing its status.
+8. Marking the task as DONE.
+
+The application stores task information so that it can be loaded again when the application is used.
+
+## Data Storage
+
+Tasks are persisted as JSON data.
+
+`TaskStorage` is responsible for loading and saving tasks. Gson is used to convert Java task objects to and from JSON.
+
+The application also uses custom handling for `LocalDateTime` values when storing task information.
+
+## Testing
+
+The project contains tests under the test source directory.
+
+The project uses:
+
+* JUnit 5
+* Mockito
+* AssertJ
+
+Tests can be executed using the Gradle Wrapper.
+
+```bash
+./gradlew test
+```
+
+On Windows:
+
+```bash
+gradlew.bat test
+```
+
+## Troubleshooting
+
+### Gradle command is not recognised
+
+Use the Gradle Wrapper included in the project instead of relying on a system-wide Gradle installation.
+
+On Windows, use:
+
+```bash
+gradlew.bat build
+```
+
+### The application does not run
+
+First make sure that:
+
+* Java is installed correctly.
+* You are inside the Task Manager project directory.
+* The project builds successfully.
+* The correct Gradle Wrapper command is being used.
+
+### Tasks are not appearing
+
+Check that the application's storage file exists and that the configured storage path is correct.
+
+Also check the application output for storage or JSON-related errors.
+
+## Documentation Notes
+
+This README was generated with the assistance of AI based on the existing Task Manager project structure and implementation.
+
+The generated documentation should be reviewed against the actual source code whenever the project changes.
+
+## What I Learned
+
+This exercise showed me how AI can use existing project information to create a structured README.
+
+I learned that a useful README should explain not only what a project does, but also its requirements, structure, installation/build process, usage, testing, and troubleshooting.
+
+I also learned that AI-generated documentation must be checked against the actual project because some implementation details may not be visible from a limited amount of source code.
+
