@@ -356,3 +356,5 @@ The exercise showed me that understanding an unfamiliar codebase is easier when 
 I learned to identify the responsibilities of different classes, follow data between components, examine how state changes, and use AI to validate my understanding rather than relying only on direct explanations.
 
 I also learned that before implementing a new business rule, I should understand the existing architecture and clarify ambiguous requirements with the development team.
+
+## Exercise: Code Documentation
