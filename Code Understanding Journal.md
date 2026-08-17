@@ -511,3 +511,178 @@ The method receives a `Task` object, reads its properties, applies the appropria
 The method does not change the task. It only reads the task's current information and calculates a score. That score can then be used by `sortTasksByImportance()` to place the most important tasks first.
 
 This exercise showed me that AI can help generate documentation, but the generated documentation still needs to be checked against the actual code. I also learned that good documentation should explain not only what the code does, but also its assumptions, edge cases, and business logic.
+
+## Exercise: API Documentation
+
+# Prompt 1: Endpoint Documentation Generation
+
+## Endpoint
+
+**GET `/products`**
+
+## Purpose
+
+The `GET /products` endpoint retrieves a list of products from the database.
+
+It supports:
+
+* Filtering by category
+* Filtering by minimum and maximum price
+* Filtering products that are in stock
+* Sorting products
+* Pagination
+
+The endpoint returns the matching products together with pagination information.
+
+## Query Parameters
+
+| Parameter  | Type           | Default     | Description                                                                                             |
+| ---------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------- |
+| `category` | string         | None        | Filters products by category.                                                                           |
+| `minPrice` | number         | None        | Returns products with a price greater than or equal to this value.                                      |
+| `maxPrice` | number         | None        | Returns products with a price less than or equal to this value.                                         |
+| `sort`     | string         | `createdAt` | Specifies the field used to sort the products.                                                          |
+| `order`    | string         | `desc`      | Specifies the sorting direction. `asc` sorts ascending and any other value results in descending order. |
+| `page`     | integer        | `1`         | Specifies which page of results to return.                                                              |
+| `limit`    | integer        | `20`        | Specifies the maximum number of products returned per page.                                             |
+| `inStock`  | boolean/string | None        | When set to `true`, only products with stock greater than zero are returned.                            |
+
+## Request Body
+
+No request body is required because this is a `GET` request.
+
+## Successful Response
+
+### HTTP 200 — OK
+
+A successful response contains a `products` array and a `pagination` object.
+
+Example:
+
+```json
+{
+  "products": [
+    {
+      "_id": "65abc123",
+      "name": "Laptop",
+      "category": "Electronics",
+      "price": 899.99,
+      "stockQuantity": 12
+    },
+    {
+      "_id": "65abc456",
+      "name": "Wireless Mouse",
+      "category": "Electronics",
+      "price": 29.99,
+      "stockQuantity": 35
+    }
+  ],
+  "pagination": {
+    "total": 45,
+    "page": 1,
+    "limit": 20,
+    "pages": 3
+  }
+}
+```
+
+## Error Response
+
+### HTTP 500 — Server Error
+
+If an unexpected error occurs while retrieving the products, the endpoint returns:
+
+```json
+{
+  "error": "Server error",
+  "message": "Failed to fetch products"
+}
+```
+
+## Authentication
+
+Authentication requirements cannot be determined from the provided endpoint implementation.
+
+The code does not show authentication or authorization middleware being applied to this route.
+
+## Example Request 1
+
+Retrieve the first 20 products using the default sorting:
+
+```text
+GET /products
+```
+
+Example response:
+
+```json
+{
+  "products": [
+    {
+      "_id": "65abc123",
+      "name": "Laptop",
+      "category": "Electronics",
+      "price": 899.99,
+      "stockQuantity": 12
+    }
+  ],
+  "pagination": {
+    "total": 45,
+    "page": 1,
+    "limit": 20,
+    "pages": 3
+  }
+}
+```
+
+## Example Request 2
+
+Retrieve electronics products costing between 100 and 1000, showing only products in stock, sorted by price from lowest to highest:
+
+```text
+GET /products?category=Electronics&minPrice=100&maxPrice=1000&sort=price&order=asc&inStock=true&page=1&limit=10
+```
+
+Example response:
+
+```json
+{
+  "products": [
+    {
+      "_id": "65abc123",
+      "name": "Laptop",
+      "category": "Electronics",
+      "price": 899.99,
+      "stockQuantity": 12
+    }
+  ],
+  "pagination": {
+    "total": 8,
+    "page": 1,
+    "limit": 10,
+    "pages": 1
+  }
+}
+```
+
+## Rate Limiting and Special Considerations
+
+Rate limiting cannot be determined from the provided implementation because no rate-limiting middleware or configuration is shown.
+
+Other considerations include:
+
+* Price parameters are converted using `parseFloat()`.
+* Page and limit values are converted using `parseInt()`.
+* The endpoint calculates the number of pages using the total number of matching products.
+* The `inStock` filter is applied only when the value is exactly `"true"`.
+* The implementation does not show validation for invalid or negative page and limit values.
+* The allowed values for the `sort` field are not explicitly restricted in the provided code.
+* The exact product schema is not included, so the complete structure of a product cannot be determined from this endpoint alone.
+
+## What I Learned
+
+I learned that API documentation should describe not only what an endpoint does, but also how another developer can interact with it.
+
+The implementation code allowed me to identify the query parameters, default values, filtering behaviour, sorting, pagination, successful response, and server-error response.
+
+I also learned not to invent information that is not visible in the code. For example, authentication and rate-limiting requirements cannot be confirmed from this endpoint alone.
