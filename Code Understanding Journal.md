@@ -1010,3 +1010,43 @@ The endpoint documentation describes what the API does and how it is structured,
 I also learned that examples are important because they show developers how query parameters can be combined to perform realistic operations.
 
 The exercise reinforced the importance of checking the actual implementation before documenting assumptions about authentication, rate limiting, validation, or other behaviour.
+
+## API Documentation Exercise — Reflection
+
+### What I Learned
+
+This exercise taught me how AI can help transform existing API implementation code into useful documentation for other developers.
+
+I learned how to identify an endpoint's purpose, query parameters, default values, response formats, error responses, and possible limitations by reading the implementation code.
+
+I also learned that API documentation should not contain assumptions that cannot be confirmed from the source code. For example, authentication and rate limiting were not visible in the provided implementation, so I documented them as information that would need to be confirmed elsewhere.
+
+### What Was Most Challenging
+
+The most challenging part was understanding how all the query parameters work together, especially filtering, sorting, and pagination.
+
+Converting the endpoint documentation into OpenAPI YAML was also challenging because the information had to be represented in a structured format.
+
+### How AI Helped Me
+
+AI helped me break the API documentation task into smaller steps.
+
+Prompt 1 helped identify the endpoint's inputs, outputs, errors, and special considerations.
+
+Prompt 2 helped convert the information into a standard OpenAPI YAML structure.
+
+Prompt 3 helped turn the technical information into a practical guide that another developer could follow.
+
+### What I Would Do in a Real Project
+
+In a real project, I would first verify the generated documentation against the actual API implementation and tests.
+
+I would also check the wider application for authentication middleware, rate limiting, validation rules, database schemas, and other information that may not be visible in a single endpoint.
+
+I would keep the documentation updated whenever the API behaviour changes.
+
+### Overall Reflection
+
+This exercise showed me that AI can significantly reduce the effort required to create API documentation, but the developer still needs to review the generated documentation for accuracy.
+
+I learned that good API documentation should be clear, structured, practical, and based on the actual behaviour of the application.
