@@ -1335,3 +1335,172 @@ I learned that a useful README should explain not only what a project does, but 
 
 I also learned that AI-generated documentation must be checked against the actual project because some implementation details may not be visible from a limited amount of source code.
 
+## Prompt 2: Step-by-Step Guide Creation
+
+### Guide: Creating and Managing a Task
+
+This guide explains how a user can create a task and then manage its priority, due date, tags, and status using the Task Manager command-line application.
+
+### Prerequisites
+
+Before starting:
+
+1. Make sure Java is installed.
+2. Open a terminal.
+3. Navigate to the Java Task Manager project directory.
+4. Make sure the project builds successfully using the Gradle Wrapper.
+
+### Step 1: Build the Application
+
+Build the project before running the application.
+
+On Windows:
+
+```bash
+gradlew.bat build
+```
+
+On systems using the Unix-style Gradle Wrapper:
+
+```bash
+./gradlew build
+```
+
+A successful build indicates that the project can be compiled.
+
+### Step 2: Create a Task
+
+Use the `create` command to create a new task.
+
+The exact command arguments should be checked against the current CLI implementation because the command syntax is controlled by `TaskManagerCli.java`.
+
+The task receives an automatically generated ID when it is created.
+
+### Step 3: List Tasks
+
+Use the `list` command to view the tasks stored by the application.
+
+This allows the user to confirm that the new task was created successfully.
+
+### Step 4: Set the Task Priority
+
+A task can be assigned a priority using the `priority` command.
+
+The available priority levels are:
+
+* LOW
+* MEDIUM
+* HIGH
+* URGENT
+
+The priority is represented internally by the `TaskPriority` enum.
+
+This means the application uses a fixed set of valid priority values rather than allowing arbitrary priority values.
+
+### Step 5: Set a Due Date
+
+Use the `due` command to assign a due date to the task.
+
+The due date is stored as part of the task's data and can later be used when identifying overdue or upcoming tasks.
+
+### Step 6: Add a Tag
+
+Use the `tag` command to add a tag to the task.
+
+Tags can be used to categorize tasks or identify important tasks.
+
+For example, a task could have tags such as:
+
+```text
+work
+urgent
+project
+```
+
+### Step 7: Start the Task
+
+Use the `start` command to begin working on the task.
+
+The task's status can change from `TODO` to `IN_PROGRESS`.
+
+### Step 8: Update the Task Status
+
+Use the `status` command to change the task's status.
+
+The available statuses include:
+
+* TODO
+* IN_PROGRESS
+* REVIEW
+* DONE
+
+When a task is changed to `DONE`, the application records the completion time and updates the task's modification time.
+
+### Step 9: View the Task
+
+Use the `show` command to inspect an individual task.
+
+This allows the user to verify the task's:
+
+* ID
+* Title
+* Description
+* Priority
+* Status
+* Due date
+* Tags
+* Timestamps
+
+### Step 10: Verify Persistence
+
+The task information is saved through `TaskStorage`.
+
+The storage layer uses Gson to convert task objects into JSON data.
+
+This means that task information can be loaded again when the application is used.
+
+### Common Problems
+
+#### The command does not work
+
+Check that the command and its arguments match the syntax implemented by `TaskManagerCli.java`.
+
+#### The task cannot be found
+
+Verify that the correct task ID is being used.
+
+#### The priority is rejected
+
+Check that the supplied priority is one of the valid `TaskPriority` values.
+
+#### Changes are not appearing
+
+Check that the task update completed successfully and that the storage operation was performed.
+
+### Troubleshooting Approach
+
+When something goes wrong, I would trace the operation through the application:
+
+```text
+User command
+    ↓
+TaskManagerCli
+    ↓
+TaskManager
+    ↓
+Task
+    ↓
+TaskStorage
+    ↓
+JSON storage
+```
+
+This data-flow approach helps identify which component is responsible for the problem.
+
+### What I Learned
+
+Creating this guide helped me understand that user documentation should explain a process in a logical order rather than simply describing the source code.
+
+I also learned that documentation should clearly distinguish between information confirmed by the implementation and information that needs to be checked in the actual CLI.
+
+A step-by-step guide can make a complex application easier for a new user or developer to understand.
