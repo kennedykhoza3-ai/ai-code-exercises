@@ -59,3 +59,17 @@ const { name, age } = user;
 
 console.log(name);
 console.log(age);
+```
+
+### Practical Implementation
+
+I created a JavaScript file called `destructuring-practice.js` to practise object destructuring and see how values can be extracted from objects into separate variables.
+
+### Key Learnings
+
+1. I learned that object destructuring provides a shorter and cleaner way to extract values from JavaScript objects.
+
+2. I learned that destructuring is useful when working with objects that contain several properties because I can access only the values I need.
+
+3. I learned that property names must match the object's properties when destructuring, unless I explicitly rename the variables.
+```
